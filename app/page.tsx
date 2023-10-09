@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ethers } from "ethers"
 import Getblock from '@/contracts/Storage.abi.json'
-import { Button, Flex, useColorModeValue } from '@chakra-ui/react'
+import { Button, Flex } from '@chakra-ui/react'
 import { Box, Heading } from '@chakra-ui/react'
 import { CheckCircleIcon } from '@chakra-ui/icons'
 
@@ -22,29 +22,34 @@ export default function Home() {
     setContractAddress(contract.address)
   };
   return (
-    <Flex h="100vh" justifyContent="center" alignItems="center" bgColor={`#00B5D8`}>
+    <Flex h="100vh" justifyContent="center" alignItems="center" bgColor={`white`}>
       {contractAddress === "" && (
         <Button
-          px={8}
-          bg={useColorModeValue('#151f21', 'gray.900')}
+          px={4}
+          fontSize={'sm'}
+          rounded={'full'}
+          bg={'blue'}
           color={'white'}
-          rounded={'md'}
+          boxShadow={
+            '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
+          }
+          onClick={deploy}
           _hover={{
-            transform: 'translateY(-2px)',
-            boxShadow: 'lg',
+            bg: 'blue',
           }}
-          onClick={deploy}>
-          Click Me
+          _focus={{
+            bg: 'blue',
+          }}>
+          Create Contract
         </Button>
       )}
       {contractAddress !== "" && (
         <Box textAlign="center" py={10} px={6}>
-          <CheckCircleIcon boxSize={'50px'} color={'green.500'} />
-          <Heading as="h2" size="xl" mt={6} mb={2}>
+          <CheckCircleIcon boxSize={'50px'} color={'green'} />
+          <Heading as="h2" size="xl" mt={6} mb={2} color={'black'}>
             {contractAddress}
           </Heading>
         </Box>
-
       )}
     </Flex>
   )
