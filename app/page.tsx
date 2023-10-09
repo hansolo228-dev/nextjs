@@ -10,17 +10,30 @@ import { CheckCircleIcon } from '@chakra-ui/icons'
 
 export default function Home() {
   const [contractAddress, setContractAddress] = useState("");
+  const [count, setCount] = useState(0);
+
+
 
   const deploy = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
-    console.log(provider)
     const signer = provider.getSigner();
     const contractFactory = new ethers.ContractFactory(Getblock.abi, Getblock.bytecode, signer);
     const contract = await contractFactory.deploy();
-    console.log(contract.deployTransaction["hash"])
     setContractAddress(contract.address)
   };
+  const initialCount = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send('eth_requestAccounts', []);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, Getblock.abi, signer);
+    const tx = await contract.increment();
+    await tx.wait();
+    const initialCount = await contract.getCount();
+    setCount(initialCount.toNumber());
+
+  }
+
   return (
     <Flex h="100vh" justifyContent="center" alignItems="center" bgColor={`white`}>
       {contractAddress === "" && (
@@ -49,6 +62,9 @@ export default function Home() {
           <Heading as="h2" size="xl" mt={6} mb={2} color={'black'}>
             {contractAddress}
           </Heading>
+          <Button onClick={initialCount} color={`black`}>
+            Update counter = {count}
+          </Button>
         </Box>
       )}
     </Flex>
